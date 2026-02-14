@@ -1,0 +1,45 @@
+id,name,province,nearest_city,vertical_drop_m,num_runs,num_lifts,lon_wgs84,lat_wgs84
+1,Whistler Blackcomb,British Columbia,Whistler,1609,200,37,-122.963435,50.081447
+2,Sun Peaks Resort,British Columbia,Kamloops,882,137,13,-119.879779,50.878095
+3,Big White Ski Resort,British Columbia,Kelowna,777,119,16,-118.945908,49.737909
+4,Silver Star Mountain Resort,British Columbia,Vernon,760,132,12,-119.048863,50.368798
+5,Revelstoke Mountain Resort,British Columbia,Revelstoke,1713,69,6,-118.109209,50.969263
+6,Kicking Horse Mountain Resort,British Columbia,Golden,1260,128,5,-117.049927,51.298243
+7,Fernie Alpine Resort,British Columbia,Fernie,1082,142,10,-115.101565,49.455545
+8,Panorama Mountain Resort,British Columbia,Invermere,1220,129,10,-116.212425,50.441951
+9,Red Mountain Resort,British Columbia,Rossland,893,119,8,-117.846346,49.105633
+10,Apex Mountain Resort,British Columbia,Penticton,610,79,4,-119.911072,49.383778
+11,Mount Washington Alpine Resort,British Columbia,Courtenay,505,81,7,-125.302194,49.750505
+12,Cypress Mountain,British Columbia,Vancouver,610,53,6,-123.201144,49.39768
+13,Grouse Mountain,British Columbia,Vancouver,365,33,5,-123.07678,49.379472
+14,Lake Louise Ski Resort,Alberta,Lake Louise,991,145,10,-116.161917,51.442311
+15,Sunshine Village,Alberta,Banff,1070,145,12,-115.762202,51.089525
+16,Mount Norquay,Alberta,Banff,503,60,6,-115.634249,51.20133
+17,Marmot Basin,Alberta,Jasper,914,91,7,-118.083355,52.800592
+18,Nakiska Ski Area,Alberta,Kananaskis,735,71,6,-115.151265,50.941949
+19,Castle Mountain Resort,Alberta,Pincher Creek,953,94,6,-114.425259,49.308886
+20,Canyon Ski Resort,Alberta,Red Deer,122,24,4,-113.682935,52.304456
+22,Sasquatch Mountain Resort,British Columbia,Harrison Hot Springs,490,40,4,-121.938795,49.383918
+23,Blue Mountain Resort,Ontario,Collingwood,220,43,13,-80.307265,44.505803
+24,Mont Tremblant,Quebec,Mont-Tremblant,645,102,14,-74.589143,46.11588
+25,Le Massif de Charlevoix,Quebec,Baie-Saint-Paul,770,53,5,-70.570703,47.278657
+26,Mont-Sainte-Anne,Quebec,Quebec City,625,71,13,-70.926068,47.087722
+27,Mont Sutton,Quebec,Sutton,460,60,9,-72.561762,45.103551
+28,Owl's Head,Quebec,Mansonville,540,52,8,-72.294396,45.071623
+29,Mont Orford,Quebec,Magog,580,61,8,-72.241782,45.31184
+30,Tremblant,Quebec,Mont-Tremblant,645,102,14,-74.585923,46.20969
+31,Marble Mountain,Newfoundland and Labrador,Corner Brook,523,39,4,-57.828906,48.938912
+32,Ski Wentworth,Nova Scotia,Wentworth,260,22,4,-63.551777,45.608101
+33,Crabbe Mountain,New Brunswick,Fredericton,260,22,4,-67.101123,46.11871
+34,Poley Mountain,New Brunswick,Sussex,220,31,3,-65.376559,45.673358
+35,Ski Martock,Nova Scotia,Windsor,180,22,4,-64.171196,44.935817
+36,Calabogie Peaks,Ontario,Calabogie,230,24,4,-76.786902,45.269037
+37,Mount Pakenham,Ontario,Pakenham,100,15,5,-76.338246,45.320122
+38,Horseshoe Resort,Ontario,Barrie,100,29,9,-79.67367,44.548967
+39,Lakeridge Ski Resort,Ontario,Uxbridge,61,23,5,-79.062737,44.02787
+40,Searchmont Resort,Ontario,Sault Ste. Marie,213,18,3,-84.041554,46.768352
+41,Mount Jamieson Resort,Ontario,Timmins,190,22,3,-81.541188,48.534286
+42,Mission Ridge Winter Park,Saskatchewan,Fort Qu'Appelle,152,18,4,-103.780728,50.754913
+43,Ski Montcalm,Quebec,Rawdon,190,27,6,-73.829031,46.04043
+44,Asessippi Ski Resort,Manitoba,Russell,150,25,4,-101.339511,50.9517
+45,Holiday Mountain,Manitoba,La Riviere,91,19,3,-98.694213,49.237087

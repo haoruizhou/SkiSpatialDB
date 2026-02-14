@@ -1,0 +1,65 @@
+services:
+  # ── PostGIS database ──────────────────────────────────────────────────────
+  postgres:
+    image: postgis/postgis:15-3.3
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: spatialdb
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  # ── pgAdmin 4 ─────────────────────────────────────────────────────────────
+  pgadmin:
+    build: ./pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@company.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+
+  # ── Geocode worker (polls for rows without geometry, geocodes via Nominatim)
+  geocoder:
+    build: ./fastapi-app
+    command: ["python", "geocode_worker.py"]
+    environment:
+      DATABASE_URL: "postgresql://admin:admin@postgres:5432/spatialdb"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  # ── FastAPI backend (GeoJSON API for Cesium frontend) ──────────────────────
+  api:
+    build: ./fastapi-app
+    environment:
+      DATABASE_URL: "postgresql://admin:admin@postgres:5432/spatialdb"
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  # ── CesiumJS 3-D globe frontend ───────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_CESIUM_ION_TOKEN: ${VITE_CESIUM_ION_TOKEN}
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  pg_data:
+  pgadmin_data:
