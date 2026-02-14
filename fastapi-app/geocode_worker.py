@@ -29,30 +29,46 @@ if not DATABASE_URL:
     raise SystemExit(1)
 
 # ── SCHEMA ENSURANCE ────────────────────────────────────────────────────────────
+# ── ISO 3166-1 alpha-2 lookup for Nominatim countrycodes ────────────────────
+COUNTRY_CODES = {
+    "canada": "ca", "united states": "us", "usa": "us", "us": "us",
+    "france": "fr", "switzerland": "ch", "austria": "at", "italy": "it",
+    "germany": "de", "japan": "jp", "australia": "au", "norway": "no",
+    "sweden": "se", "spain": "es", "chile": "cl", "argentina": "ar",
+    "new zealand": "nz", "united kingdom": "gb", "uk": "gb",
+}
+
+def country_code(country: str) -> str | None:
+    """Return 2-letter ISO code for a country name, or None."""
+    return COUNTRY_CODES.get(country.strip().lower())
+
 def ensure_tracking_columns(conn):
-    """Create geocode_attempts and geocode_failed if they don't exist."""
+    """Create geocode_attempts, geocode_failed, and country if they don't exist."""
     with conn.cursor() as cur:
         cur.execute("""
             ALTER TABLE ski_resorts
               ADD COLUMN IF NOT EXISTS geocode_attempts INTEGER NOT NULL DEFAULT 0,
-              ADD COLUMN IF NOT EXISTS geocode_failed   BOOLEAN NOT NULL DEFAULT FALSE;
+              ADD COLUMN IF NOT EXISTS geocode_failed   BOOLEAN NOT NULL DEFAULT FALSE,
+              ADD COLUMN IF NOT EXISTS country          TEXT NOT NULL DEFAULT 'Canada';
         """)
     conn.commit()
     logger.info("Ensured tracking columns exist on ski_resorts.")
 
 # ── GEOCODE CALL (Nominatim – free, no API key) ────────────────────────────────
-def geocode(query: str):
+def geocode(query: str, cc: str | None = None):
     """
     Geocode using OpenStreetMap Nominatim.
     Free, no API key required. Rate limit: 1 request/second.
+    cc = optional ISO 3166-1 alpha-2 country code for Nominatim.
     Returns (lon_wgs84, lat_wgs84) or (None, None).
     """
     params = {
         "q": query,
         "format": "json",
         "limit": 1,
-        "countrycodes": "ca",
     }
+    if cc:
+        params["countrycodes"] = cc
     try:
         resp = requests.get(NOMINATIM_URL, params=params, headers=HEADERS, timeout=10)
         resp.raise_for_status()
@@ -73,7 +89,7 @@ def update_ski_resorts(conn):
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         # select rows that need geocoding
         cur.execute("""
-            SELECT id, name, province, nearest_city, geocode_attempts
+            SELECT id, name, province, nearest_city, country, geocode_attempts
               FROM ski_resorts
              WHERE geom_wgs84 IS NULL
                AND geocode_failed   = FALSE
@@ -99,13 +115,15 @@ def update_ski_resorts(conn):
             name     = row.get("name") or ""
             province = row.get("province") or ""
             city     = row.get("nearest_city") or ""
-            query    = f"{name}, {province}, Canada"
+            cntry    = row.get("country") or "Canada"
+            cc       = country_code(cntry)
+            query    = f"{name}, {province}, {cntry}"
 
-            lon, lat = geocode(query)
+            lon, lat = geocode(query, cc=cc)
             if lon is None:
                 # fallback: try with nearest city
-                query2 = f"{name}, {city}, Canada"
-                lon, lat = geocode(query2)
+                query2 = f"{name}, {city}, {cntry}"
+                lon, lat = geocode(query2, cc=cc)
                 time.sleep(1.1)
 
             if lon is None:

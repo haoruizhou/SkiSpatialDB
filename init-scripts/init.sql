@@ -10,6 +10,7 @@ CREATE TABLE ski_resorts (
     name            TEXT NOT NULL,
     province        TEXT,
     nearest_city    TEXT,
+    country         TEXT NOT NULL DEFAULT 'Canada',
     vertical_drop_m INTEGER,
     num_runs        INTEGER,
     num_lifts       INTEGER,

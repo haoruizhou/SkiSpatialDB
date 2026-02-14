@@ -62,7 +62,7 @@ def ski_resorts_geojson():
     """All ski resorts that have a geometry."""
     with get_conn() as conn, conn.cursor() as cur:
         cur.execute("""
-            SELECT id, name, province, nearest_city,
+            SELECT id, name, province, nearest_city, country,
                    vertical_drop_m, num_runs, num_lifts,
                    ST_AsGeoJSON(geom_wgs84) AS geometry
               FROM ski_resorts

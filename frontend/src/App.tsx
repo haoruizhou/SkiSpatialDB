@@ -27,6 +27,7 @@ interface SkiResort {
   name: string
   province?: string
   nearest_city?: string
+  country?: string
   vertical_drop_m?: number
   num_runs?: number
   num_lifts?: number
@@ -62,9 +63,9 @@ export default function App() {
     viewer.scene.globe.depthTestAgainstTerrain = true
     viewer.scene.globe.enableLighting = true
 
-    // Fly to Canadian Rockies
+    // Fly to Whistler area
     viewer.camera.flyTo({
-      destination: Cartesian3.fromDegrees(-116.5, 51.0, 800_000),
+      destination: Cartesian3.fromDegrees(-122.96, 48.08, 250_000),
       orientation: {
         heading: CesiumMath.toRadians(0),
         pitch: CesiumMath.toRadians(-45),
@@ -159,6 +160,7 @@ export default function App() {
           name: f.properties.name,
           province: f.properties.province,
           nearest_city: f.properties.nearest_city,
+          country: f.properties.country,
           vertical_drop_m: f.properties.vertical_drop_m,
           num_runs: f.properties.num_runs,
           num_lifts: f.properties.num_lifts,
@@ -181,7 +183,7 @@ export default function App() {
     <>
       {/* ── info panel ───────────────────────────────────────── */}
       <div style={panelStyle}>
-        <strong style={{ fontSize: 15 }}>🎿 Canadian Ski Resorts</strong>
+        <strong style={{ fontSize: 15 }}>🎿 Ski Resorts</strong>
         <div style={{ marginTop: 6, fontSize: 13, color: '#ccc' }}>
           {count} resort{count !== 1 ? 's' : ''} · polling every{' '}
           {POLL_INTERVAL / 1000}s
@@ -198,7 +200,9 @@ export default function App() {
             }}
           >
             <div style={{ fontWeight: 600 }}>{selected.name}</div>
-            {selected.province && <div>{selected.province}</div>}
+            {(selected.province || selected.country) && (
+              <div>{[selected.province, selected.country].filter(Boolean).join(', ')}</div>
+            )}
             {selected.vertical_drop_m != null && (
               <div>↕ {selected.vertical_drop_m} m drop</div>
             )}
