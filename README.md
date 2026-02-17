@@ -1,9 +1,35 @@
 # SkiSpatialDB
 
-Interactive 3-D globe for exploring Canadian ski resorts.
+Interactive 3D globe for exploring Canadian ski resorts.
 Built with **CesiumJS**, **FastAPI**, **PostGIS**, and **Docker Compose**.
 
 ## Architecture
+
+```mermaid
+graph TD
+    User(["User<br/>(browser)"])
+
+    subgraph Docker Compose
+        FE["frontend<br/>React 18 + CesiumJS + Vite<br/>:3000"]
+        API["api<br/>FastAPI + Uvicorn<br/>:8000"]
+        GEO["geocoder<br/>Python worker<br/>(Nominatim / OSM)"]
+        PG[("postgres<br/>PostGIS 15-3.3<br/>:5432")]
+        PGA["pgadmin<br/>pgAdmin 4<br/>:5050"]
+    end
+
+    CSV["ski_resorts.csv<br/>(seed data)"]
+    Nominatim["Nominatim API<br/>(OpenStreetMap)"]
+
+    User -->|"HTTP :3000"| FE
+    User -->|"HTTP :5050"| PGA
+    FE -->|"GET /api/geojson/ski_resorts<br/>(polls every 5 s)"| API
+    API -->|"SQL query"| PG
+    GEO -->|"SQL read missing geom"| PG
+    GEO -->|"SQL write point geometry"| PG
+    GEO -->|"geocode address"| Nominatim
+    PGA -->|"SQL"| PG
+    CSV -->|"init-scripts seed on first run"| PG
+```
 
 | Service      | Tech                        | Port  |
 |--------------|-----------------------------|-------|
@@ -19,7 +45,7 @@ Built with **CesiumJS**, **FastAPI**, **PostGIS**, and **Docker Compose**.
 docker compose up --build -d
 ```
 
-Open <http://localhost:3000> to see the 3-D globe.
+Open <http://localhost:3000> to see the 3D globe.
 
 ### What happens on first run
 
